@@ -4,6 +4,9 @@ package gr.aueb.cf.schoolapp;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import gr.aueb.cf.schoolapp.util.DBUtil;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -14,6 +17,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.JButton;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
@@ -127,7 +131,7 @@ public class TeachersInsertFrame extends JFrame {
 				String inputFirstname = firstnameText.getText().trim();
 				String inputLastname = lastnameText.getText().trim();
 				
-				String sql = "INSERT INTO teachers (firstname, lastname) VALUES (?, ?)";
+				
 				
 				if (inputFirstname.equals("")) {
 					errorFirstname.setText("Το όνομα είναι υποχρεώτικό");
@@ -149,9 +153,11 @@ public class TeachersInsertFrame extends JFrame {
 					return;
 				}
 				
+				String sql = "INSERT INTO teachers (firstname, lastname) VALUES (?, ?)";
 				
-				try {
-					PreparedStatement ps = MainMenuFrame.getConnection().prepareStatement(sql);
+				try (Connection conn = DBUtil.getConnection();
+						PreparedStatement ps = conn.prepareStatement(sql);) {
+					
 					ps.setString(1, inputFirstname);
 					ps.setString(2, inputLastname);
 					
@@ -159,7 +165,7 @@ public class TeachersInsertFrame extends JFrame {
 					JOptionPane.showMessageDialog(null, n + " records inserted", "INSERT", JOptionPane.PLAIN_MESSAGE);
 					
 				} catch (SQLException e1) {
-					e1.printStackTrace();
+					// e1.printStackTrace();
 					JOptionPane.showMessageDialog(null, "Insertion error", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
