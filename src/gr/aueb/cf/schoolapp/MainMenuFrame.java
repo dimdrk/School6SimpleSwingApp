@@ -94,6 +94,12 @@ public class MainMenuFrame extends JFrame {
 		contentPane.add(studentsLabel);
 		
 		JButton studentsBtn = new JButton("");
+		studentsBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Main.getStudentsMenuFrame().setVisible(true);
+				Main.getMainMenuFrame().setEnabled(false);
+			}
+		});
 		studentsBtn.setBackground(new Color(214, 214, 214));
 		studentsBtn.setBounds(10, 196, 40, 40);
 		contentPane.add(studentsBtn);

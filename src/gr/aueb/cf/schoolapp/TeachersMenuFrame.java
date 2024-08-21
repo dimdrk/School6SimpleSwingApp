@@ -31,7 +31,7 @@ public class TeachersMenuFrame extends JFrame {
 		JButton teachersViewBtn = new JButton("Προβολή Εκπαιδευτών");
 		teachersViewBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Main.getTeachersUpdateDeleteframe().setVisible(true);
+				Main.getTeachersUpdateDeleteFrame().setVisible(true);
 				Main.getTeachersMenuFrame().setEnabled(false);
 			}
 		});
@@ -49,7 +49,7 @@ public class TeachersMenuFrame extends JFrame {
 		});
 		insertBtn.setForeground(new Color(0, 0, 204));
 		insertBtn.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		insertBtn.setBounds(100, 134, 202, 50);
+		insertBtn.setBounds(100, 120, 202, 50);
 		contentPane.add(insertBtn);
 		
 		JButton closeBtn = new JButton("Κλείσιμο");

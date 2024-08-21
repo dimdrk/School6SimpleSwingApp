@@ -1,57 +1,57 @@
 package gr.aueb.cf.schoolapp;
 
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import java.awt.FlowLayout;
+import javax.swing.border.BevelBorder;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.Color;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.JScrollPane;
+import java.awt.Component;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
+import gr.aueb.cf.schoolapp.util.DBUtil;
+
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JTable;
-import javax.swing.JScrollPane;
-import javax.swing.table.DefaultTableModel;
-
-import gr.aueb.cf.schoolapp.util.DBUtil;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
-import java.awt.Font;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import java.awt.Color;
-import javax.swing.border.BevelBorder;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.Toolkit;
 
-public class TeachersUpdateDeleteFrame extends JFrame {
+public class StudentsUpdateDeleteFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTable teachersTable;
+	private JTable studentsTable;
 	private DefaultTableModel model = new DefaultTableModel();
-	private JTextField lastnameSearchText;
-	private JLabel idLabel;
 	private JTextField idText;
-	private JLabel firstnameLabel;
+	private JLabel idLabel;
 	private JTextField firstnameText;
-	private JLabel lastnameLabel;
 	private JTextField lastnameText;
+	private JTextField lastnameSearchText;
+	private JLabel firstnameLabel;
 	private JLabel errorFirstname;
 	private JLabel errorLastname;
 
-	public TeachersUpdateDeleteFrame() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(TeachersUpdateDeleteFrame.class.getResource("/resources/eduv2.png")));
-		setTitle("Ενημέρωση / Διαγραφή Εκπαιδευτή");
+	public StudentsUpdateDeleteFrame() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(StudentsUpdateDeleteFrame.class.getResource("/resources/eduv2.png")));
+		setTitle("Ενημέρωση / Διαγραφή Εκπαιδευόμενου");
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowOpened(WindowEvent e) {
@@ -68,76 +68,55 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 				lastnameText.setText("");
 			}
 		});
+		
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setBounds(100, 100, 821, 533);
+		setBounds(100, 100, 878, 535);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		teachersTable = new JTable();
-		teachersTable.addMouseListener(new MouseAdapter() {
+		studentsTable = new JTable();
+		studentsTable.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				idText.setText((String) model.getValueAt(teachersTable.getSelectedRow(), 0));
-				firstnameText.setText((String) model.getValueAt(teachersTable.getSelectedRow(), 1));
-				lastnameText.setText((String) model.getValueAt(teachersTable.getSelectedRow(), 2));
+				idText.setText((String) model.getValueAt(studentsTable.getSelectedRow(), 0));
+				firstnameText.setText((String) model.getValueAt(studentsTable.getSelectedRow(), 1));
+				lastnameText.setText((String) model.getValueAt(studentsTable.getSelectedRow(), 2));
 			}
 		});
-		teachersTable.setModel(new DefaultTableModel(
+		studentsTable.setModel(new DefaultTableModel(
 			new Object[][] {},
 			new String[] {"Κωδικός", "Όνομα", "Επώνυμο"}
 		));
 		
-		model = (DefaultTableModel) teachersTable.getModel();
+		model = (DefaultTableModel) studentsTable.getModel();
 		
-		teachersTable.setBounds(33, 97, 313, 320);
-		contentPane.add(teachersTable);
+		studentsTable.setBounds(33, 97, 313, 320);
+		contentPane.add(studentsTable);
 		
-		JScrollPane scrollPane = new JScrollPane(teachersTable);
+		JScrollPane scrollPane = new JScrollPane(studentsTable);
 		scrollPane.setBounds(33, 66, 371, 392);
 		contentPane.add(scrollPane);
 		
-		JLabel lastnameSearchLabel = new JLabel("Επώνυμο");
-		lastnameSearchLabel.setForeground(new Color(189, 0, 0));
-		lastnameSearchLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lastnameSearchLabel.setBounds(33, 25, 56, 25);
-		contentPane.add(lastnameSearchLabel);
-		
-		lastnameSearchText = new JTextField();
-		lastnameSearchText.setBounds(99, 25, 199, 25);
-		contentPane.add(lastnameSearchText);
-		lastnameSearchText.setColumns(10);
-		
-		JButton btnSearch = new JButton("Αναζήτηση");
-		btnSearch.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				buildTable();
-			}
-		});
-		btnSearch.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnSearch.setForeground(new Color(0, 0, 128));
-		btnSearch.setBounds(319, 27, 100, 21);
-		contentPane.add(btnSearch);
-		
 		JPanel panel = new JPanel();
 		panel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		panel.setBounds(424, 66, 339, 176);
+		panel.setBounds(500, 59, 330, 211);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
 		idLabel = new JLabel("Κωδικός");
-		idLabel.setBounds(35, 23, 45, 13);
-		panel.add(idLabel);
-		idLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		idLabel.setForeground(new Color(0, 0, 128));
+		idLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		idLabel.setBounds(45, 33, 45, 13);
+		panel.add(idLabel);
 		
 		idText = new JTextField();
-		idText.setBounds(92, 20, 64, 19);
-		panel.add(idText);
 		idText.setEditable(false);
 		idText.setColumns(10);
+		idText.setBounds(102, 30, 64, 19);
+		panel.add(idText);
 		
 		firstnameText = new JTextField();
 		firstnameText.addFocusListener(new FocusAdapter() {
@@ -148,21 +127,21 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 				validateFirstname(inputFirstname);				
 			}
 		});
-		firstnameText.setBounds(92, 46, 170, 19);
-		panel.add(firstnameText);
 		firstnameText.setColumns(10);
+		firstnameText.setBounds(102, 56, 170, 19);
+		panel.add(firstnameText);
 		
 		firstnameLabel = new JLabel("Όνομα");
-		firstnameLabel.setBounds(45, 49, 36, 13);
-		panel.add(firstnameLabel);
-		firstnameLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		firstnameLabel.setForeground(new Color(0, 0, 128));
+		firstnameLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		firstnameLabel.setBounds(55, 59, 36, 13);
+		panel.add(firstnameLabel);
 		
-		lastnameLabel = new JLabel("Επώνυμο");
-		lastnameLabel.setBounds(26, 110, 55, 13);
-		panel.add(lastnameLabel);
-		lastnameLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		JLabel lastnameLabel = new JLabel("Επώνυμο");
 		lastnameLabel.setForeground(new Color(0, 0, 128));
+		lastnameLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lastnameLabel.setBounds(36, 120, 55, 13);
+		panel.add(lastnameLabel);
 		
 		lastnameText = new JTextField();
 		lastnameText.addFocusListener(new FocusAdapter() {
@@ -173,25 +152,24 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 				validateLastname(inputLastname);
 			}
 		});
-		lastnameText.setBounds(92, 107, 170, 19);
-		panel.add(lastnameText);
 		lastnameText.setColumns(10);
+		lastnameText.setBounds(102, 117, 170, 19);
+		panel.add(lastnameText);
 		
 		errorLastname = new JLabel("");
-		errorLastname.setForeground(new Color(255, 0, 0));
-		errorLastname.setBounds(92, 136, 201, 19);
+		errorLastname.setForeground(Color.RED);
+		errorLastname.setBounds(102, 146, 201, 19);
 		panel.add(errorLastname);
 		
 		errorFirstname = new JLabel("");
-		errorFirstname.setForeground(new Color(255, 0, 0));
-		errorFirstname.setBounds(92, 75, 170, 19);
+		errorFirstname.setForeground(Color.RED);
+		errorFirstname.setBounds(102, 85, 170, 19);
 		panel.add(errorFirstname);
 		
 		JButton updateBtn = new JButton("Ενημέρωση");
-		updateBtn.setForeground(new Color(0, 0, 128));
-		updateBtn.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		updateBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+
 				
 				// Data Binding
 				int inputId = Integer.parseInt(idText.getText().trim());
@@ -206,7 +184,7 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 					return;
 				}
 				
-				String sql = "UPDATE teachers SET firstname = ?, lastname = ? WHERE id = ?";
+				String sql = "UPDATE students SET firstname = ?, lastname = ? WHERE id = ?";
 				try (Connection conn = DBUtil.getConnection();
 						PreparedStatement ps = conn.prepareStatement(sql);) {
 					
@@ -228,13 +206,16 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 				}
 			}
 		});
-		updateBtn.setBounds(468, 292, 134, 56);
+		updateBtn.setForeground(new Color(0, 0, 128));
+		updateBtn.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		updateBtn.setBounds(535, 298, 134, 56);
 		contentPane.add(updateBtn);
 		
 		JButton deleteBtn = new JButton("Διαγραφή");
 		deleteBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String sql = "DELETE FROM teachers WHERE id = ?";
+
+				String sql = "DELETE FROM students WHERE id = ?";
 				
 				try (Connection conn = DBUtil.getConnection();
 						PreparedStatement ps = conn.prepareStatement(sql);) {
@@ -258,27 +239,49 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 		});
 		deleteBtn.setForeground(new Color(0, 0, 128));
 		deleteBtn.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		deleteBtn.setBounds(612, 292, 134, 56);
+		deleteBtn.setBounds(679, 298, 134, 56);
 		contentPane.add(deleteBtn);
 		
 		JButton closeBtn = new JButton("Κλείσιμο");
 		closeBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Main.getTeachersMenuFrame().setEnabled(true);
-				Main.getTeachersUpdateDeleteFrame().setVisible(false);
+				Main.getStudentsMenuFrame().setEnabled(true);
+				Main.getStudentsUpdateDeleteFrame().setVisible(false);
 			}
 		});
 		closeBtn.setForeground(new Color(0, 0, 128));
 		closeBtn.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		closeBtn.setBounds(629, 402, 134, 56);
+		closeBtn.setBounds(696, 408, 134, 56);
 		contentPane.add(closeBtn);
+		
+		JLabel lastnameSearchLabel = new JLabel("Επώνυμο");
+		lastnameSearchLabel.setForeground(new Color(189, 0, 0));
+		lastnameSearchLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lastnameSearchLabel.setBounds(49, 22, 56, 25);
+		contentPane.add(lastnameSearchLabel);
+		
+		lastnameSearchText = new JTextField();
+		lastnameSearchText.setColumns(10);
+		lastnameSearchText.setBounds(115, 22, 199, 25);
+		contentPane.add(lastnameSearchText);
+		
+		JButton btnSearch = new JButton("Αναζήτηση");
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				buildTable();
+			}
+		});
+		btnSearch.setForeground(new Color(0, 0, 128));
+		btnSearch.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		btnSearch.setBounds(335, 24, 100, 21);
+		contentPane.add(btnSearch);		
 	}
 	
-	private void buildTable() {
+private void buildTable() {
 		
 		Vector<String> vector;
 		
-		String sql = "SELECT id, firstname, lastname FROM teachers WHERE lastname LIKE ?";
+		String sql = "SELECT id, firstname, lastname FROM students WHERE lastname LIKE ?";
 		try (Connection conn = DBUtil.getConnection();
 				PreparedStatement ps = conn.prepareStatement(sql);) {
 
@@ -305,7 +308,7 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 			JOptionPane.showMessageDialog(null, "Insertion error", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
-	
+
 	private void validateFirstname(String inputFirstname) {
 		if (inputFirstname.equals("")) {
 			errorFirstname.setText("Το όνομα είναι υποχρεώτικό");

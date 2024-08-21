@@ -1,32 +1,31 @@
 package gr.aueb.cf.schoolapp;
 
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import gr.aueb.cf.schoolapp.util.DBUtil;
 
+import java.awt.Toolkit;
+import javax.swing.border.BevelBorder;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import java.awt.Font;
 import java.awt.Color;
+import java.awt.Font;
 import javax.swing.JTextField;
-import javax.swing.border.BevelBorder;
 import javax.swing.JButton;
-import java.awt.Toolkit;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.awt.event.ActionEvent;
 
-public class TeachersInsertFrame extends JFrame {
+public class StudentInsertFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -36,7 +35,7 @@ public class TeachersInsertFrame extends JFrame {
 	private JLabel errorLastname;
 
 	
-	public TeachersInsertFrame() {
+	public StudentInsertFrame() {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowActivated(WindowEvent e) {
@@ -44,9 +43,10 @@ public class TeachersInsertFrame extends JFrame {
 				lastnameText.setText("");
 			}
 		});
-		setIconImage(Toolkit.getDefaultToolkit().getImage(TeachersInsertFrame.class.getResource("/resources/eduv2.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(StudentInsertFrame.class.getResource("/resources/eduv2.png")));
+		setTitle("Εισαγωγή Εκπαιδευόμενου");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setBounds(100, 100, 450, 336);
+		setBounds(100, 100, 456, 320);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -55,25 +55,25 @@ public class TeachersInsertFrame extends JFrame {
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		panel.setBounds(28, 37, 368, 199);
+		panel.setBounds(44, 43, 376, 168);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
 		errorFirstname = new JLabel("");
-		errorFirstname.setForeground(new Color(255, 0, 0));
-		errorFirstname.setBounds(91, 83, 243, 26);
+		errorFirstname.setForeground(Color.RED);
+		errorFirstname.setBounds(102, 60, 243, 26);
 		panel.add(errorFirstname);
 		
 		errorLastname = new JLabel("");
 		errorLastname.setForeground(Color.RED);
-		errorLastname.setBounds(91, 155, 243, 26);
+		errorLastname.setBounds(102, 132, 243, 26);
 		panel.add(errorLastname);
 		
 		JLabel firstnameLabel = new JLabel("Όνομα");
-		firstnameLabel.setBounds(39, 46, 41, 26);
-		panel.add(firstnameLabel);
-		firstnameLabel.setForeground(new Color(0, 0, 255));
+		firstnameLabel.setForeground(Color.BLUE);
 		firstnameLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		firstnameLabel.setBounds(50, 23, 41, 26);
+		panel.add(firstnameLabel);
 		
 		firstnameText = new JTextField();
 		firstnameText.addFocusListener(new FocusAdapter() {
@@ -91,10 +91,11 @@ public class TeachersInsertFrame extends JFrame {
 				};
 			}
 		});
-		firstnameText.setBounds(91, 47, 243, 26);
-		panel.add(firstnameText);
+		
 		firstnameText.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		firstnameText.setColumns(10);
+		firstnameText.setBounds(102, 24, 243, 26);
+		panel.add(firstnameText);
 		
 		lastnameText = new JTextField();
 		lastnameText.addFocusListener(new FocusAdapter() {
@@ -112,16 +113,17 @@ public class TeachersInsertFrame extends JFrame {
 				};				
 			}
 		});
-		lastnameText.setBounds(91, 119, 243, 26);
-		panel.add(lastnameText);
+		
 		lastnameText.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lastnameText.setColumns(10);
+		lastnameText.setBounds(102, 96, 243, 26);
+		panel.add(lastnameText);
 		
 		JLabel lastnameLabel = new JLabel("Επώνυμο");
-		lastnameLabel.setBounds(28, 118, 52, 26);
-		panel.add(lastnameLabel);
 		lastnameLabel.setForeground(Color.BLUE);
 		lastnameLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lastnameLabel.setBounds(39, 95, 52, 26);
+		panel.add(lastnameLabel);
 		
 		JButton insertBtn = new JButton("Εισαγωγή");
 		insertBtn.addActionListener(new ActionListener() {
@@ -153,7 +155,7 @@ public class TeachersInsertFrame extends JFrame {
 					return;
 				}
 				
-				String sql = "INSERT INTO teachers (firstname, lastname) VALUES (?, ?)";
+				String sql = "INSERT INTO students (firstname, lastname) VALUES (?, ?)";
 				
 				try (Connection conn = DBUtil.getConnection();
 						PreparedStatement ps = conn.prepareStatement(sql);) {
@@ -170,21 +172,22 @@ public class TeachersInsertFrame extends JFrame {
 				}
 			}
 		});
-		insertBtn.setForeground(new Color(0, 0, 255));
+		insertBtn.setForeground(Color.BLUE);
 		insertBtn.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		insertBtn.setBounds(190, 246, 97, 32);
+		insertBtn.setBounds(216, 236, 97, 32);
 		contentPane.add(insertBtn);
 		
 		JButton closeBtn = new JButton("Κλείσιμο");
 		closeBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Main.getTeachersMenuFrame().setEnabled(true);
-				Main.getTeachersInsertFrame().setVisible(false);
+				Main.getStudentsMenuFrame().setEnabled(true);
+				Main.getStudentInsertFrame().setVisible(false);
+				
 			}
 		});
 		closeBtn.setForeground(Color.BLUE);
 		closeBtn.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		closeBtn.setBounds(297, 246, 97, 32);
+		closeBtn.setBounds(323, 236, 97, 32);
 		contentPane.add(closeBtn);
 	}
 }
